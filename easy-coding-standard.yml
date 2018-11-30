@@ -55,4 +55,4 @@ parameters:
     SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.WriteOnlyProperty: ~
     'Unused variable $fields.': ~
     'Unused variable $action_control.': ~
-
+    'Unused variable $products.': ~
