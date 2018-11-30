@@ -8,7 +8,7 @@
                 <table class="form-table frm-no-margin">
                     <tbody>
                     <tr>
-                        <th><label> <strong><?php _e('WooCommerce Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
+                        <th><label> <strong><?php _e('WC Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
                         <td>
                         </td>
                     </tr>
