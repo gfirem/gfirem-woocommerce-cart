@@ -10,7 +10,6 @@
                     <tr>
                         <th><label> <strong><?php _e('WooCommerce Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
                         <td>
-                            DropDown with the product list from woocommerce, take in count to load the same when the action is open again
                         </td>
                     </tr>
                     </tbody>
@@ -28,7 +27,7 @@
                     <tr>
                         <th><label> <strong><?php _e('Name: ', 'gfirem-woo-cart'); ?></strong></label></th>
                         <td>
-                            <input type="text" class="large-text" value="<?php echo esc_attr($form_action->post_content['billing_name']); ?>" name="<?php echo $action_control->get_field_name('billing_name') ?>">
+                            <input type="text" class="large-text gfirem-woo-cart-field" id="billing_name_<?php echo $this->number ?>" value="<?php echo esc_attr($form_action->post_content['billing_name']); ?>" name="<?php echo $action_control->get_field_name('billing_name') ?>">
                         </td>
                     </tr>
                     </tbody>
