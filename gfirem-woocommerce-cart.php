@@ -94,6 +94,20 @@ if (! class_exists('GFireMWooCart')) {
             return $actions;
         }
 
+        public static function replace_short_code($value, $form, $form_entry, $short_codes)
+        {
+            $content = '';
+            if (class_exists('FrmProFieldsHelper') && class_exists('FrmFieldsHelper') && class_exists('FrmProContent')) {
+                $content = $value;
+                FrmProFieldsHelper::replace_non_standard_formidable_shortcodes(array(), $content);
+                $content = FrmFieldsHelper::basic_replace_shortcodes($content, $form, $form_entry);
+                $content = FrmProContent::replace_shortcodes($content, $form_entry, $short_codes);
+                $content = FrmFieldsHelper::replace_content_shortcodes($content, $form_entry, $short_codes);
+            }
+
+            return $content;
+        }
+
         public function requirements_error_notice()
         {
             require self::$view . 'requirement_notice.php';

@@ -14,11 +14,15 @@ if (! defined('ABSPATH')) {
 
 class GFireMWooCartAction extends FrmFormAction
 {
+    private $checkout_handler;
+
     public function __construct()
     {
         try {
+            require_once 'class-gfirem-woo-cart-handler.php';
+            $this->checkout_handler = GFireMWooCartHandler::get_instance();
             add_action('admin_head', array($this, 'admin_style'));
-            add_action('frm_trigger_formidable_entries_duplicator_create_action', array($this, 'onCreate'), 10, 3);
+            add_action('frm_trigger_gfirem-woo-cart_create_action', array($this, 'onCreate'), 10, 3);
             $action_ops = array(
                 'classes' => 'dashicons dashicons-admin-page dashicons-cart gfirem-woo-cart-icon',
                 'limit' => 99,
@@ -55,6 +59,7 @@ class GFireMWooCartAction extends FrmFormAction
      */
     public function onCreate($action, $entry, $form)
     {
+        $this->checkout_handler->add_product_to_cart($action, $entry, $form);
         GFireMWooCartLog::log(array(
             'action' => 'onCreate',
             'object_type' => GFireMWooCart::getSlug(),
@@ -78,8 +83,9 @@ class GFireMWooCartAction extends FrmFormAction
             $form = $args['form'];
             $fields = $args['values']['fields'];
             $action_control = $this;
-            $args = array();
-            $products = wc_get_products($args);
+            $products = wc_get_products(array());
+
+            $checkout_fields = GFireMWooCartHandler::get_checkout_fields();
 
             if ($form->status === 'published') {
                 require GFireMWooCart::$view . 'form.php';
@@ -104,6 +110,12 @@ class GFireMWooCartAction extends FrmFormAction
             'is_checkout_redirect_enabled' => '',
             'billing_name' => '',
         );
+
+        foreach (GFireMWooCartHandler::get_checkout_fields() as $field_set_key => $field_set) {
+            foreach ($field_set as $key => $field) {
+                $result[$key] = '';
+            }
+        }
         if ($this->form_id !== null) {
             $result['form_id'] = $this->form_id;
         }

@@ -56,3 +56,6 @@ parameters:
     'Unused variable $fields.': ~
     'Unused variable $action_control.': ~
     'Unused variable $products.': ~
+    'Unused variable $checkout_fields.': ~
+    'Unused variable $field_set_key.': ~
+    'Unused variable $field.': ~
