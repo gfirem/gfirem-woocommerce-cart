@@ -20,7 +20,7 @@ class GFireMWooCartAction extends FrmFormAction
             add_action('admin_head', array($this, 'admin_style'));
             add_action('frm_trigger_formidable_entries_duplicator_create_action', array($this, 'onCreate'), 10, 3);
             $action_ops = array(
-                'classes' => 'dashicons dashicons-admin-page dashicons-controls-repeat gfirem-woo-cart-icon',
+                'classes' => 'dashicons dashicons-admin-page dashicons-cart gfirem-woo-cart-icon',
                 'limit' => 99,
                 'active' => true,
                 'priority' => 999,
@@ -44,7 +44,7 @@ class GFireMWooCartAction extends FrmFormAction
     {
         $current_screen = get_current_screen();
         if ($current_screen->id === 'toplevel_page_formidable') {
-            wp_enqueue_style('gfirem-woo-cart', GFireMWooCart::$assets . 'css/gfirem-woo-cart.css');
+            wp_enqueue_style('gfirem-woo-cart', GFireMWooCart::$assets . 'css/gfirem-woocommerce-cart.css');
         }
     }
 
@@ -57,8 +57,39 @@ class GFireMWooCartAction extends FrmFormAction
             'action' => 'onCreate',
             'object_type' => GFireMWooCart::getSlug(),
             'object_subtype' => static::class,
-            'object_name' => sprintf('Action trigger by Entry (%s) Created in the Form %s, by the action {s}', $entry->id, $form->id, $action->ID),
+            'object_name' => sprintf(__('Action trigger by Entry (%s) Created in the Form %s, by the action {s}', 'gfirem-woo-cart'), $entry->id, $form->id, $action->ID),
         ));
+    }
+
+    /**
+     * Get the HTML for your action
+     *
+     * @param array $form_action
+     * @param array $args
+     *
+     * @return string|void
+     */
+    public function form($form_action, $args = array())
+    {
+        try {
+            extract($args);
+            $form = $args['form'];
+            $fields = $args['values']['fields'];
+            $action_control = $this;
+
+            if ($form->status === 'published') {
+                require GFireMWooCart::$view . 'form.php';
+            } else {
+                _e('The form need to published.', 'gfirem-woo-cart');
+            }
+        } catch (Exception $ex) {
+            FormidableEntriesDuplicatorLog::log(array(
+                'action' => 'form',
+                'object_type' => FormidableEntriesDuplicator::getSlug(),
+                'object_subtype' => static::class,
+                'object_name' => $ex->getMessage(),
+            ));
+        }
     }
 
     public function get_defaults()
@@ -67,6 +98,7 @@ class GFireMWooCartAction extends FrmFormAction
             'form_id' => $this->get_field_name('form_id'),
             'product_id' => '',
             'is_checkout_redirect_enabled' => '',
+            'billing_name' => '',
         );
         if ($this->form_id !== null) {
             $result['form_id'] = $this->form_id;

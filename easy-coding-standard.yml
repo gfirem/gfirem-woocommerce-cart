@@ -53,5 +53,6 @@ parameters:
     # code to skip for all files
     SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessDocComment: ~
     SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff.WriteOnlyProperty: ~
-    'Unused variable $first_ranking.': ~
+    'Unused variable $fields.': ~
+    'Unused variable $action_control.': ~
 
