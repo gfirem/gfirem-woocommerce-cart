@@ -8,7 +8,7 @@
                 <table class="form-table frm-no-margin">
                     <tbody>
                     <tr>
-                        <th><label> <strong><?php _e('WooCommerce Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
+                        <th><label> <strong><?php _e('WC Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
                         <td>
                             <select value="<?php echo esc_attr($form_action->post_content['product_id']); ?>" name="<?php echo $action_control->get_field_name('product_id') ?>">
                                 <?php foreach ($products as $product) {
