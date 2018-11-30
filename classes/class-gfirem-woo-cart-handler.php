@@ -30,15 +30,17 @@ class GFireMWooCartHandler
 
     public function add_product_to_cart($action, $entry, $form)
     {
-        if (! WC()->cart->is_empty()) {
-            return;
-        }
-
+        $clean_cart = isset($action->post_content['is_clean_cart_enabled']) ? $action->post_content['is_clean_cart_enabled'] : false;
         $product_id = isset($action->post_content['product_id']) ? $action->post_content['product_id'] : 0;
 
         if (empty($product_id)) {
             return;
         }
+
+        if (! empty($clean_cart)) {
+            WC()->cart->empty_cart(true);
+        }
+
         $this->cart_item_id = WC()->cart->add_to_cart($product_id, 1, 0, array(), array('action' => $action, 'entry' => $entry, 'form' => $form));
     }
 
@@ -52,21 +54,30 @@ class GFireMWooCartHandler
                     $product_id = isset($item['action']->post_content['product_id']) ? $item['action']->post_content['product_id'] : 0;
                     if (intval($product_id) === $item['product_id']) {
                         if (! empty($item['action']->post_content[$input])) {
-	                        $short_codes = FrmFieldsHelper::get_shortcodes($item['action']->post_content[$input], $item['form']->id);
-	                        $field_value = do_shortcode(GFireMWooCart::replace_short_code($item['action']->post_content[$input], $item['form'], $item['entry'], $short_codes));
-                        	if($input === 'billing_country' || $input === 'shipping_country'){
-		                        $countries = 'shipping_country' === $input ? WC()->countries->get_shipping_countries() : WC()->countries->get_allowed_countries();
+                            $search_country_by_name = isset($item['action']->post_content['is_country_name_search_enabled']) ? $item['action']->post_content['is_country_name_search_enabled'] : false;
+                            $search_state_by_name = isset($item['action']->post_content['is_state_name_search_enabled']) ? $item['action']->post_content['is_state_name_search_enabled'] : false;
+                            $short_codes = FrmFieldsHelper::get_shortcodes($item['action']->post_content[$input], $item['form']->id);
+                            $field_value = do_shortcode(GFireMWooCart::replace_short_code($item['action']->post_content[$input], $item['form'], $item['entry'], $short_codes));
+                            if (($input === 'billing_country' || $input === 'shipping_country') && $search_country_by_name) {
+                                $countries = $input === 'shipping_country' ? WC()->countries->get_shipping_countries() : WC()->countries->get_allowed_countries();
 
-		                        $field_value = array_search( strtolower( $field_value ), array_map( 'strtolower', $countries ) );
-	                        } else if($input === 'order_comments'){
-                        		$field_value = strip_tags($field_value);
-	                        }
-	                        return $field_value;
+                                return array_search(strtolower($field_value), array_map('strtolower', $countries), true);
+                            } elseif ($input === 'order_comments') {
+                                return strip_tags($field_value);
+                            } elseif (($input === 'billing_state' || $input === 'shipping_state') && $search_state_by_name) {
+                                $for_country = isset($item['action']->post_content['country']) ? $item['action']->post_content['country'] : WC()->checkout->get_value($input === 'billing_state' ? 'billing_country' : 'shipping_country');
+                                $states = WC()->countries->get_states($for_country);
+
+                                return array_search(strtolower($field_value), array_map('strtolower', $states), true);
+                            }
+
+                            return $field_value;
                         }
                     }
                 }
             }
         }
+
         return $value;
     }
 
@@ -112,6 +123,26 @@ class GFireMWooCartHandler
                 'placeholder' => esc_attr__('Password', 'woocommerce'),
             );
         }
+
+        $fields['billing']['billing_state'] = array(
+            'type' => 'state',
+            'label' => __('State / County', 'woocommerce'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'validate' => array('state'),
+            'autocomplete' => 'address-level1',
+            'priority' => 80,
+        );
+
+        $fields['shipping']['shipping_state'] = array(
+            'type' => 'state',
+            'label' => __('State / County', 'woocommerce'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'validate' => array('state'),
+            'autocomplete' => 'address-level1',
+            'priority' => 80,
+        );
 
         foreach (array_keys($fields) as $field_type) {
             // Sort each of the checkout field sections based on priority.

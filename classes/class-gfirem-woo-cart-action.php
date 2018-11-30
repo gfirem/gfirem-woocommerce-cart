@@ -107,8 +107,9 @@ class GFireMWooCartAction extends FrmFormAction
         $result = array(
             'form_id' => $this->get_field_name('form_id'),
             'product_id' => '',
-            'is_checkout_redirect_enabled' => '',
-            'billing_name' => '',
+            'is_clean_cart_enabled' => '',
+            'is_country_name_search_enabled' => '',
+            'is_state_name_search_enabled' => '',
         );
 
         foreach (GFireMWooCartHandler::get_checkout_fields() as $field_set_key => $field_set) {
