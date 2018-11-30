@@ -14,9 +14,11 @@
     "jakub-onderka/php-parallel-lint": "dev-master",
     "jakub-onderka/php-console-highlighter": "dev-master",
     "wp-coding-standards/wpcs": "dev-master",
-    "symplify/easy-coding-standard": "^5.2@dev"
+    "symplify/easy-coding-standard": "^5.2@dev",
+    "brainmaestro/composer-git-hooks": "dev-master"
   },
   "scripts": {
+    "cghooks": "vendor/bin/cghooks",
     "tests": "composer fixes && composer lints",
     "sniffs": [
       "phpcs --report=full --colors -p --standard=phpcs.xml --ignore=*/vendor/*,*/node_modules/* classes/ --report=diff -v",
@@ -34,7 +36,21 @@
     "lints": "parallel-lint ./classes  --blame --exclude vendor && parallel-lint ./view  --blame --exclude vendor",
     "phpcs-setup": "./vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs",
     "phpcbf-setup": "./vendor/bin/phpcbf --config-set installed_paths vendor/wp-coding-standards/wpcs",
-    "post-install-cmd": "composer phpcs-setup && composer phpcbf-setup",
-    "post-update-cmd": "composer phpcs-setup && composer phpcbf-setup"
+    "post-install-cmd": [
+      "vendor/bin/cghooks add --ignore-lock",
+      "composer phpcs-setup && composer phpcbf-setup"
+    ],
+    "post-update-cmd": [
+      "vendor/bin/cghooks update",
+      "composer phpcs-setup && composer phpcbf-setup"
+    ]
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "echo committing as $(git config user.name)",
+        "composer tests"
+      ]
+    }
   }
 }

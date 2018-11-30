@@ -8,12 +8,13 @@
  * @license http://www.apache.org/licenses/
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! defined('ABSPATH')) {
+    exit;
 }
 
-class GFireMWooCartAdmin {
-	function __construct() {
-
-	}
+class GFireMWooCartAdmin
+{
+    public function __construct()
+    {
+    }
 }
