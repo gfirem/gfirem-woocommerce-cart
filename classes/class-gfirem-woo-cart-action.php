@@ -45,8 +45,8 @@ class GFireMWooCartAction extends FrmFormAction
         $current_screen = get_current_screen();
         if ($current_screen->id === 'toplevel_page_formidable') {
             wp_enqueue_style('gfirem-woo-cart', GFireMWooCart::$assets . 'css/gfirem-woocommerce-cart.css', array(), GFireMWooCart::getVersion());
-	        wp_register_script( 'gfirem-woo-cart', GFireMWooCart::$assets . 'js/gfirem-woocommerce-cart.js', array( "jquery" ), GFireMWooCart::getVersion(),true );
-	        wp_enqueue_script( 'gfirem-woo-cart' );
+            wp_register_script('gfirem-woo-cart', GFireMWooCart::$assets . 'js/gfirem-woocommerce-cart.js', array('jquery'), GFireMWooCart::getVersion(), true);
+            wp_enqueue_script('gfirem-woo-cart');
         }
     }
 
