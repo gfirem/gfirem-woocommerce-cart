@@ -1,0 +1,15 @@
+.frm_gfirem-woo-cart_action.frm_bstooltip.frm_active_action.dashicons.dashicons-admin-page.dashicons-controls-repeat.gfirem-woo-cart-icon:before,
+span.frm_form_action_icon.dashicons.dashicons-admin-page.dashicons-controls-repeat.gfirem-woo-cart-icon:before {
+    color: #dc5958 !important;
+}
+
+.frm_gfirem-woo-cart_action.frm_bstooltip.frm_active_action.dashicons.dashicons-admin-page.dashicons-controls-repeat.gfirem-woo-cart-icon,
+span.frm_form_action_icon.dashicons.dashicons-admin-page.dashicons-controls-repeat.gfirem-woo-cart-icon {
+    height: auto;
+    width: auto;
+    font-size: 13px;
+}
+
+.gfirem-woo-cart-loading {
+    display: none;
+}

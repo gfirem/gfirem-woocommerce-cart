@@ -54,7 +54,9 @@ if (! class_exists('GFireMWooCart')) {
 			require_once 'classes' . DIRECTORY_SEPARATOR . 'class-gfirem-woo-cart-log.php';
 			new GFireMWooCartLog();
 			try {
-				if ( class_exists( 'FrmAppHelper' ) && method_exists( 'FrmAppHelper', 'pro_is_installed' )){
+				if ( class_exists( 'FrmAppHelper' ) && method_exists( 'FrmAppHelper', 'pro_is_installed' )
+				&& FrmAppHelper::pro_is_installed()){
+					add_action( 'frm_registered_form_actions', array( $this, 'register_action' ) );
 					require_once 'classes' . DIRECTORY_SEPARATOR . 'class-gfirem-woo-cart-admin.php';
 					new GFireMWooCartAdmin();
 					require_once 'classes' . DIRECTORY_SEPARATOR . 'class-gfirem-woo-cart-action.php';
@@ -72,6 +74,20 @@ if (! class_exists('GFireMWooCart')) {
 					'object_name'    => $ex->getMessage(),
 				) );
 			}
+		}
+
+		/**
+		 * Register action
+		 *
+		 * @param $actions
+		 *
+		 * @return mixed
+		 */
+		public function register_action( $actions ) {
+			$actions['gfirem-woo-cart'] = 'GFireMWooCartAction';
+			include_once  'classes/class-gfirem-woo-cart-action.php';
+
+			return $actions;
 		}
 
 		public function requirements_error_notice() {
