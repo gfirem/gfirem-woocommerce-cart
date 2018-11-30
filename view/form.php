@@ -13,7 +13,7 @@
                             <select value="<?php echo esc_attr($form_action->post_content['product_id']); ?>" name="<?php echo $action_control->get_field_name('product_id') ?>">
                                 <?php foreach ($products as $product) {
     ?>
-                                    <option value="<?php echo $product->id ?>" <?php echo $product->id == $form_action->post_content['product_id'] ? 'selected' : '' ?> >
+                                    <option value="<?php echo $product->id ?>" <?php echo esc_attr($product->id) === esc_attr($form_action->post_content['product_id']) ? 'selected' : '' ?> >
                                         <?php echo $product->name ?>
                                     </option>
                                 <?php
