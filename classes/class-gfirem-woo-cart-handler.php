@@ -52,8 +52,16 @@ class GFireMWooCartHandler
                     $product_id = isset($item['action']->post_content['product_id']) ? $item['action']->post_content['product_id'] : 0;
                     if (intval($product_id) === $item['product_id']) {
                         if (! empty($item['action']->post_content[$input])) {
-                            $short_codes = FrmFieldsHelper::get_shortcodes($item['action']->post_content[$input], $item['form']->id);
-                            return do_shortcode(GFireMWooCart::replace_short_code($item['action']->post_content[$input], $item['form'], $item['entry'], $short_codes));
+	                        $short_codes = FrmFieldsHelper::get_shortcodes($item['action']->post_content[$input], $item['form']->id);
+	                        $field_value = do_shortcode(GFireMWooCart::replace_short_code($item['action']->post_content[$input], $item['form'], $item['entry'], $short_codes));
+                        	if($input === 'billing_country' || $input === 'shipping_country'){
+		                        $countries = 'shipping_country' === $input ? WC()->countries->get_shipping_countries() : WC()->countries->get_allowed_countries();
+
+		                        $field_value = array_search( strtolower( $field_value ), array_map( 'strtolower', $countries ) );
+	                        } else if($input === 'order_comments'){
+                        		$field_value = strip_tags($field_value);
+	                        }
+	                        return $field_value;
                         }
                     }
                 }

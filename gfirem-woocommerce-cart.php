@@ -60,7 +60,6 @@ if (! class_exists('GFireMWooCart')) {
             try {
                 if (class_exists('FrmAppHelper') && method_exists('FrmAppHelper', 'pro_is_installed')
                 && FrmAppHelper::pro_is_installed() && GFireMWooCartDependencies::woocommerce_active_check()) {
-                    //TODO add check for Woocommerce
                     add_action('frm_registered_form_actions', array($this, 'register_action'));
                     require_once 'classes' . DIRECTORY_SEPARATOR . 'class-gfirem-woo-cart-admin.php';
                     new GFireMWooCartAdmin();
