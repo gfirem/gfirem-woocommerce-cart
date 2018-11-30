@@ -10,7 +10,13 @@
                     <tr>
                         <th><label> <strong><?php _e('WooCommerce Product: ', 'gfirem-woo-cart'); ?></strong></label></th>
                         <td>
-                            DropDown with the product list from woocommerce, take in count to load the same when the action is open again
+                            <select value="<?php echo esc_attr($form_action->post_content['product_id']); ?>" name="<?php echo $action_control->get_field_name('product_id') ?>">
+                                <?php foreach ($products as $product) { ?>
+                                    <option value="<?php echo $product->id ?>" <?php echo ($product->id == $form_action->post_content['product_id']) ? 'selected':'' ?> >
+                                        <?php echo $product->name ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
                         </td>
                     </tr>
                     </tbody>

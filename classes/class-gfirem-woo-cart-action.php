@@ -76,6 +76,8 @@ class GFireMWooCartAction extends FrmFormAction
             $form = $args['form'];
             $fields = $args['values']['fields'];
             $action_control = $this;
+            $args = array();
+            $products = wc_get_products( $args );
 
             if ($form->status === 'published') {
                 require GFireMWooCart::$view . 'form.php';
