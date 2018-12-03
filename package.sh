@@ -63,9 +63,9 @@ fi
 
 echo "Zip to"
 
-echo "$wd"/"$packagename"-"$version".zip
+echo "$wd"/"$packagename".zip
 
-zip -r "$wd"/"$packagename"-"$version".zip ./ &> /dev/null
+zip -r "$wd"/"$packagename".zip ./ &> /dev/null
 
 rm -rf /tmp/"$foldername"
 
